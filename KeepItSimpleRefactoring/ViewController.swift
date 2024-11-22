@@ -12,14 +12,15 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .gray
         
-//        let assistent = RefactoringAssistent.shared
-//        assistent.searchSwiftFilesInProject()
-//        
-//        let swapper = NameSwapper()
-//        swapper.searchFuncNamesInProject()
-//        swapper.renameFuncInProject()
+        let assistent = RefactoringAssistent.shared
+        assistent.searchSwiftFilesInProject()
+        
+        let swapper = NameSwapper()
+        swapper.searchFuncNamesInProject()
+        swapper.renameFuncInProject()
         
         let appender = CodeAppender()
+        appender.appendNewContentToAllSwiftFiles()
     }
 }
 

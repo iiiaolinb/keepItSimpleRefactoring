@@ -21,6 +21,7 @@
 		34D690052C824D2200C818AE /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 34D690042C824D2200C818AE /* Base */; };
 		34D690102C824F6000C818AE /* WordsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D6900F2C824F6000C818AE /* WordsGenerator.swift */; };
 		34D690122C82A37300C818AE /* NameSwapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D690112C82A37300C818AE /* NameSwapper.swift */; };
+		4AAA6D2C2CD9FF6200E3A2FF /* CodeUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAA6D2B2CD9FF4E00E3A2FF /* CodeUnits.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		34D690062C824D2200C818AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34D6900F2C824F6000C818AE /* WordsGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsGenerator.swift; sourceTree = "<group>"; };
 		34D690112C82A37300C818AE /* NameSwapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameSwapper.swift; sourceTree = "<group>"; };
+		4AAA6D2B2CD9FF4E00E3A2FF /* CodeUnits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeUnits.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 		349765142C925A0D008A6775 /* CodeAppender */ = {
 			isa = PBXGroup;
 			children = (
+				4AAA6D2B2CD9FF4E00E3A2FF /* CodeUnits.swift */,
 				3497650A2C88C06F008A6775 /* CodeAppender.swift */,
 				349765122C9259AE008A6775 /* UIElementCodeGenerator.swift */,
 				349765152C925AC5008A6775 /* StringCodeGenerator.swift */,
@@ -174,6 +177,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AAA6D2C2CD9FF6200E3A2FF /* CodeUnits.swift in Sources */,
 				34D68FFD2C824D2000C818AE /* ViewController.swift in Sources */,
 				349765112C88C417008A6775 /* Extensions.swift in Sources */,
 				34D690122C82A37300C818AE /* NameSwapper.swift in Sources */,
