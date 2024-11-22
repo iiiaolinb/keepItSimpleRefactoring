@@ -72,25 +72,18 @@ final class CodeAppender {
     }
     
     private func generateRandomText() -> String {
-        var result: String = ""
-        
         let entityName = generator.generateEntityName()
+        let funcString = generateFirstFuncString()
         let firstString = generateFirstRandomString(for: entityName)
-        
-        result += CodeUnits.tab.rawValue + CodeUnits.commentString.rawValue + CodeUnits.enter.rawValue + firstString
-        
-        for i in 0...Int.random(in: 1...3) {
-            let anotherString = generateAnotherRandomString(for: entityName)
-            result += anotherString
-        }
+        let anotherString = generateAnotherRandomString(for: entityName)
 
-        return result + CodeUnits.tab.rawValue + CodeUnits.commentString.rawValue + CodeUnits.enter.rawValue
+        return CodeUnits.tab.rawValue + funcString + firstString + anotherString + CodeUnits.tab.rawValue + CodeUnits.tab.rawValue + CodeUnits.curleBracketClose.rawValue + CodeUnits.enter.rawValue
     }
     
     private func generateFirstRandomString(for entity: String) -> String {
         var result = ""
         if let UIElement = UIElement.allCases.randomElement()?.rawValue {
-            result = CodeUnits.tab.rawValue + CodeUnits.varString.rawValue + CodeUnits.space.rawValue + entity + CodeUnits.space.rawValue + CodeUnits.equal.rawValue + CodeUnits.space.rawValue + UIElement + CodeUnits.figureBracketOpen.rawValue + CodeUnits.figureBracketClose.rawValue + CodeUnits.enter.rawValue
+            result = CodeUnits.tab.rawValue + CodeUnits.tab.rawValue + CodeUnits.tab.rawValue + CodeUnits.varString.rawValue + CodeUnits.space.rawValue + entity + CodeUnits.space.rawValue + CodeUnits.equal.rawValue + CodeUnits.space.rawValue + UIElement + CodeUnits.figureBracketOpen.rawValue + CodeUnits.figureBracketClose.rawValue + CodeUnits.enter.rawValue
         }
         return result
     }
@@ -98,7 +91,7 @@ final class CodeAppender {
     private func generateAnotherRandomString(for entity: String) -> String {
         var result = ""
         if let property = UIElementProperty.allCases.randomElement() {
-            let first = CodeUnits.tab.rawValue + entity + CodeUnits.dot.rawValue + property.rawValue
+            let first = CodeUnits.tab.rawValue + CodeUnits.tab.rawValue + CodeUnits.tab.rawValue + entity + CodeUnits.dot.rawValue + property.rawValue
             let second = CodeUnits.space.rawValue + CodeUnits.equal.rawValue + CodeUnits.space.rawValue
             let third = property.getPropertyType().getPropertyTypeRandomString() + CodeUnits.enter.rawValue
             result = first + second + third
@@ -136,9 +129,15 @@ final class CodeAppender {
         }
     }
     
-    private func generateRandomFunc() -> String {
-        let funcString = CodeUnits.tab.rawValue + CodeUnits.privateString.rawValue + CodeUnits.space.rawValue + CodeUnits.funcString.rawValue + CodeUnits.space.rawValue + generator.generateFuncName() + CodeUnits.figureBracketOpen.rawValue + CodeUnits.figureBracketClose.rawValue + CodeUnits.space.rawValue + CodeUnits.curleBracketOpen.rawValue + CodeUnits.enter.rawValue
+    private func generateRandomFunc(_ isPrivate: Bool = false) -> String {
+        let funcString = generateFirstFuncString(isPrivate)
         let randomText = generateRandomText()
         return funcString + randomText + CodeUnits.tab.rawValue + CodeUnits.curleBracketClose.rawValue + CodeUnits.enter.rawValue
+    }
+    
+    private func generateFirstFuncString(_ isPrivate: Bool = false) -> String {
+        let privateString = isPrivate ? CodeUnits.privateString.rawValue + CodeUnits.space.rawValue : ""
+        let funcString = CodeUnits.tab.rawValue + privateString + CodeUnits.funcString.rawValue + CodeUnits.space.rawValue + generator.generateFuncName() + CodeUnits.figureBracketOpen.rawValue + CodeUnits.figureBracketClose.rawValue + CodeUnits.space.rawValue + CodeUnits.curleBracketOpen.rawValue + CodeUnits.enter.rawValue
+        return funcString
     }
 }
