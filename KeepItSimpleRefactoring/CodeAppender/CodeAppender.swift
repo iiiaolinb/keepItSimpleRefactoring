@@ -10,6 +10,10 @@ import Foundation
 final class CodeAppender {
     let assistent = RefactoringAssistent.shared
     let generator = WordsGenerator()
+    var currentRandomFunctionCount = 0
+    let maxRandomFunctionCount: Int = 10
+    var randomText = ""
+    var newContentCount = 0
     
     func appendNewContentToAllSwiftFiles() {
         //assistent.searchSwiftFilesInProject()
@@ -17,6 +21,7 @@ final class CodeAppender {
             appendNewContent(to: $0.key)
             appendNewFunc(to: $0.key)
         }
+        print("FINAL GENERATED FUNCTIONS COUNT: \(newContentCount)")
     }
     
     private func appendNewContent(to fileName: String?) {
@@ -58,12 +63,19 @@ final class CodeAppender {
         if ranges.count == 1 {
             result = fisrtPart + "\n" + generateRandomText() + secondPart
         } else {
+            randomText = generateRandomText()
             for i in 0..<ranges.count {
+                currentRandomFunctionCount += 1
                 endIndex = result.index(ranges[i].upperBound, offsetBy: additionalCharsCount)
                 
                 let fisrtPart = result[startIndex..<endIndex]
                 let secondPart = result[endIndex..<result.endIndex]
-                let randomText = generateRandomText()
+                
+                if currentRandomFunctionCount >= maxRandomFunctionCount {
+                    randomText = generateRandomText()
+                    currentRandomFunctionCount = 0
+                }
+                
                 result = fisrtPart + "\n" + randomText + secondPart
                 additionalCharsCount += randomText.count + 1
             }
@@ -71,13 +83,19 @@ final class CodeAppender {
         return String(result)
     }
     
-    private func generateRandomText() -> String {
+    private func generateRandomText(withFunc: Bool = false) -> String {
+        newContentCount += 1
         let entityName = generator.generateEntityName()
         let funcString = generateFirstFuncString()
+        let constString = generateFirstConstString()
         let firstString = generateFirstRandomString(for: entityName)
         let anotherString = generateAnotherRandomString(for: entityName)
-
-        return CodeUnits.tab.rawValue + funcString + firstString + anotherString + CodeUnits.tab.rawValue + CodeUnits.tab.rawValue + CodeUnits.curleBracketClose.rawValue + CodeUnits.enter.rawValue
+        
+        if withFunc {
+            return CodeUnits.tab.rawValue + funcString + firstString + anotherString + CodeUnits.tab.rawValue + CodeUnits.tab.rawValue + CodeUnits.curleBracketClose.rawValue + CodeUnits.enter.rawValue
+        } else {
+            return CodeUnits.tab.rawValue + constString + firstString + anotherString + CodeUnits.tab.rawValue + CodeUnits.tab.rawValue + CodeUnits.curleBracketClose.rawValue + CodeUnits.enter.rawValue
+        }
     }
     
     private func generateFirstRandomString(for entity: String) -> String {
@@ -131,7 +149,14 @@ final class CodeAppender {
     
     private func generateRandomFunc(_ isPrivate: Bool = false) -> String {
         let funcString = generateFirstFuncString(isPrivate)
-        let randomText = generateRandomText()
+        
+        currentRandomFunctionCount += 1
+        if currentRandomFunctionCount >= maxRandomFunctionCount {
+            randomText = generateRandomText(withFunc: true)
+            currentRandomFunctionCount = 0
+        }
+        
+        //let randomText = generateRandomText()
         return funcString + randomText + CodeUnits.tab.rawValue + CodeUnits.curleBracketClose.rawValue + CodeUnits.enter.rawValue
     }
     
@@ -139,5 +164,9 @@ final class CodeAppender {
         let privateString = isPrivate ? CodeUnits.privateString.rawValue + CodeUnits.space.rawValue : ""
         let funcString = CodeUnits.tab.rawValue + privateString + CodeUnits.funcString.rawValue + CodeUnits.space.rawValue + generator.generateFuncName() + CodeUnits.figureBracketOpen.rawValue + CodeUnits.figureBracketClose.rawValue + CodeUnits.space.rawValue + CodeUnits.curleBracketOpen.rawValue + CodeUnits.enter.rawValue
         return funcString
+    }
+    
+    private func generateFirstConstString() -> String {
+        CodeUnits.tab.rawValue + CodeUnits.letString.rawValue + CodeUnits.space.rawValue + generator.generateEntityName() + CodeUnits.space.rawValue + CodeUnits.equal.rawValue + CodeUnits.space.rawValue + CodeUnits.curleBracketOpen.rawValue + CodeUnits.enter.rawValue
     }
 }
